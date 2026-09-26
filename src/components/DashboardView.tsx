@@ -93,7 +93,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
             
             <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-slate-100 via-cyan-100 to-slate-300 font-mono">
-              Proactive Scam Triage &amp; Controlled Baiting Operations
+              SCAMBAIT APPLICATION: BY HACKHIVE
             </h1>
             
             <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-normal">
