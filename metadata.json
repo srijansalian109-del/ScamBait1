@@ -1,0 +1,6 @@
+{
+  "name": "ScamBait - AI Scam Detection & Threat Intelligence",
+  "description": "AI-powered scam detection, safe scam-baiting simulation, and cybersecurity threat-intelligence platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
