@@ -5,8 +5,7 @@ The code preserves **100% of your existing logic, props, state, API calls, and s
 * **Live Animated Cyber Indicators**: Pulsing radar beacons, animated status ping dots, and live streaming scanlines.
 * **Glowing Micro-Interactions**: Ambient background blurs, glowing card borders on hover, dynamic gradient progress bars, and subtle scale transitions.
 * **Tactical UI Layout**: Subtle grid overlays, typography accents (`[ SYS_ONLINE ]`), and color-coded risk indicators (Cyan, Emerald, Rose, Amber, Purple).
-
-```tsx
+tsx
 import React, { useState, useEffect } from 'react';
 import { 
   ShieldAlert, AlertTriangle, ShieldCheck, Database, 
@@ -390,4 +389,4 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   );
 };
 
-```
+
