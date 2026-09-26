@@ -1,16 +1,8 @@
-Here is the upgraded UI for your **Scambait Defense Intelligence Engine**.
-
-The code preserves **100% of your existing logic, props, state, API calls, and standard Lucide icons**. The visual layout has been enhanced into a high-tech Security Operations Center (SOC) telemetry dashboard featuring:
-
-* **Live Animated Cyber Indicators**: Pulsing radar beacons, animated status ping dots, and live streaming scanlines.
-* **Glowing Micro-Interactions**: Ambient background blurs, glowing card borders on hover, dynamic gradient progress bars, and subtle scale transitions.
-* **Tactical UI Layout**: Subtle grid overlays, typography accents (`[ SYS_ONLINE ]`), and color-coded risk indicators (Cyan, Emerald, Rose, Amber, Purple).
-tsx
 import React, { useState, useEffect } from 'react';
 import { 
-  ShieldAlert, AlertTriangle, ShieldCheck, Database, 
-  Terminal, Share2, ArrowRight, Activity, TrendingUp, 
-  Layers, Lock, Play, Zap, FileText, CheckCircle2 
+  ShieldAlert, AlertTriangle, Database, 
+  Terminal, ArrowRight, Activity, 
+  Layers, Play, Zap, FileText 
 } from 'lucide-react';
 import { ScamReport } from '../types';
 
@@ -22,7 +14,7 @@ interface DashboardStats {
   activeSimulations: number;
   categoryCounts: { category: string; count: number }[];
   indicatorTypes: Record<string, number>;
-  recentReports: any[];
+  recentReports: ScamReport[];
 }
 
 interface DashboardViewProps {
@@ -58,26 +50,48 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     return () => { isMounted = false; };
   }, []);
 
-  const total = stats?.totalScamsAnalyzed || 5;
-  const highRisk = stats?.highRiskScams || 4;
-  const suspicious = stats?.suspiciousMessages || 0;
-  const lowRisk = Math.max(0, total - highRisk - suspicious);
-  const indicatorsTotal = stats?.threatIndicatorsCount || 13;
+  const categories = (stats?.categoryCounts && stats.categoryCounts.length > 0)
+    ? stats.categoryCounts
+    : [
+        { category: 'Bank Impersonation', count: 4 },
+        { category: 'Utility & Bill Fraud', count: 3 },
+        { category: 'Parcel & Delivery Scam', count: 2 },
+        { category: 'Part-Time Task Scam', count: 2 },
+        { category: 'Lottery & Prize Scam', count: 1 }
+      ];
+
+  const maxCount = Math.max(...categories.map(c => c.count), 1);
+
+  const reports = (stats?.recentReports && stats.recentReports.length > 0)
+    ? stats.recentReports
+    : [
+        {
+          id: 'REP-1092',
+          riskLevel: 'HIGH RISK',
+          riskScore: '89/100',
+          scamCategory: 'Bank Impersonation',
+          rawMessage: 'URGENT: Your account access has been limited due to suspicious activity. Verify immediately.',
+          sourceType: 'SMS'
+        } as any
+      ];
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-slate-950 text-cyan-400 font-mono text-sm">
+        <span className="animate-pulse">[ INITIALIZING TELEMETRY ENGINE... ]</span>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 bg-slate-950 text-slate-100 min-h-screen p-1 sm:p-2 relative font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
-      
       {/* Background Animated Ambient Mesh & Grid Pattern */}
       <div className="fixed inset-0 pointer-events-none opacity-20 bg-[radial-gradient(#06b6d4_1px,transparent_1px)] [background-size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
       {/* Hero Cyber Header Banner */}
       <div className="relative overflow-hidden bg-slate-900/80 border border-slate-800/80 rounded-2xl p-6 sm:p-8 backdrop-blur-xl shadow-2xl shadow-cyan-950/20 group">
-        
-        {/* Animated Cyber Radar Pulse Backgrounds */}
         <div className="absolute -right-20 -top-20 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none animate-pulse duration-1000" />
         <div className="absolute right-1/3 -bottom-20 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-        
-        {/* Scanline FX Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/[0.03] to-transparent pointer-events-none animate-scanline" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
@@ -101,7 +115,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </p>
           </div>
 
-          {/* Quick Actions Cluster */}
           <div className="flex flex-wrap sm:flex-nowrap items-center gap-3">
             <button
               onClick={onOpenDemo}
@@ -123,8 +136,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
       {/* Primary KPI Metrics Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5">
-        
-        {/* Card 1: Total Scams */}
         <div className="group relative overflow-hidden bg-slate-900/70 hover:bg-slate-900/90 border border-slate-800 hover:border-cyan-500/50 rounded-xl p-4 backdrop-blur-md transition-all duration-300 shadow-lg hover:shadow-cyan-950/30">
           <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <div className="flex items-center justify-between text-slate-400 mb-2">
@@ -134,7 +145,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
           </div>
           <div className="text-2xl font-mono font-black text-slate-100 group-hover:text-cyan-300 transition-colors">
-            {stats?.totalScamsAnalyzed ?? '...'}
+            {stats?.totalScamsAnalyzed ?? 5}
           </div>
           <div className="text-[11px] text-slate-500 mt-1 flex items-center gap-1 font-mono">
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
@@ -142,7 +153,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
         </div>
 
-        {/* Card 2: High Risk */}
         <div className="group relative overflow-hidden bg-slate-900/70 hover:bg-slate-900/90 border border-rose-900/40 hover:border-rose-500/60 rounded-xl p-4 backdrop-blur-md transition-all duration-300 shadow-lg hover:shadow-rose-950/40">
           <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-rose-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <div className="flex items-center justify-between text-slate-400 mb-2">
@@ -152,7 +162,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
           </div>
           <div className="text-2xl font-mono font-black text-rose-400 group-hover:text-rose-300 transition-colors">
-            {stats?.highRiskScams ?? '...'}
+            {stats?.highRiskScams ?? 4}
           </div>
           <div className="text-[11px] text-rose-400/80 mt-1 font-mono flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
@@ -160,7 +170,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
         </div>
 
-        {/* Card 3: Suspicious */}
         <div className="group relative overflow-hidden bg-slate-900/70 hover:bg-slate-900/90 border border-amber-900/40 hover:border-amber-500/60 rounded-xl p-4 backdrop-blur-md transition-all duration-300 shadow-lg hover:shadow-amber-950/30">
           <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-amber-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <div className="flex items-center justify-between text-slate-400 mb-2">
@@ -170,14 +179,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
           </div>
           <div className="text-2xl font-mono font-black text-amber-400 group-hover:text-amber-300 transition-colors">
-            {stats?.suspiciousMessages ?? '0'}
+            {stats?.suspiciousMessages ?? 0}
           </div>
           <div className="text-[11px] text-amber-400/80 mt-1 font-mono">
             Moderate risk signals
           </div>
         </div>
 
-        {/* Card 4: Indicators */}
         <div className="group relative overflow-hidden bg-slate-900/70 hover:bg-slate-900/90 border border-slate-800 hover:border-purple-500/50 rounded-xl p-4 backdrop-blur-md transition-all duration-300 shadow-lg hover:shadow-purple-950/30">
           <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <div className="flex items-center justify-between text-slate-400 mb-2">
@@ -187,14 +195,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
           </div>
           <div className="text-2xl font-mono font-black text-purple-300 group-hover:text-purple-200 transition-colors">
-            {stats?.threatIndicatorsCount ?? '...'}
+            {stats?.threatIndicatorsCount ?? 13}
           </div>
           <div className="text-[11px] text-slate-500 mt-1 font-mono">
             Phones, UPI, Domains
           </div>
         </div>
 
-        {/* Card 5: Active ScamBaits */}
         <div className="col-span-2 md:col-span-1 group relative overflow-hidden bg-slate-900/70 hover:bg-slate-900/90 border border-slate-800 hover:border-emerald-500/50 rounded-xl p-4 backdrop-blur-md transition-all duration-300 shadow-lg hover:shadow-emerald-950/30">
           <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-emerald-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <div className="flex items-center justify-between text-slate-400 mb-2">
@@ -204,7 +211,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
           </div>
           <div className="text-2xl font-mono font-black text-emerald-400 group-hover:text-emerald-300 transition-colors">
-            {stats?.activeSimulations ?? '1'}
+            {stats?.activeSimulations ?? 1}
           </div>
           <div className="text-[11px] text-emerald-400/80 mt-1 font-mono flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
@@ -215,8 +222,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
       {/* Cyber Analytics Visualizations Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        
-        {/* Chart 1: Scam Categories Breakdown (2 cols) */}
         <div className="lg:col-span-2 bg-slate-900/80 border border-slate-800 rounded-xl p-5 backdrop-blur-md shadow-xl relative overflow-hidden">
           <div className="flex items-center justify-between pb-3 border-b border-slate-800/80 mb-4">
             <div className="flex items-center gap-2">
@@ -234,21 +239,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
 
           <div className="space-y-4">
-            {(stats?.categoryCounts && stats.categoryCounts.length > 0 ? stats.categoryCounts : [
-              { category: 'Bank Impersonation', count: 4 },
-              { category: 'Utility & Bill Fraud', count: 3 },
-              { category: 'Parcel & Delivery Scam', count: 2 },
-              { category: 'Part-Time Task Scam', count: 2 },
-              { category: 'Lottery & Prize Scam', count: 1 }
-            ]).map((item, idx) => {
-              const maxCount = Math.max(...(stats?.categoryCounts?.map(c => c.count) || [4]));
-              const pct = Math.max(10, (item.count / Math.max(1, maxCount)) * 100);
+            {categories.map((item, idx) => {
+              const pct = Math.max(10, (item.count / maxCount) * 100);
 
               return (
                 <div key={idx} className="space-y-1.5 group">
                   <div className="flex items-center justify-between text-xs">
                     <span className="font-mono text-slate-300 group-hover:text-cyan-300 transition-colors flex items-center gap-2">
-                      <span className="text-[10px] text-slate-600 font-bold">0{idx + 1}</span>
+                      <span className="text-[10px] text-slate-600 font-bold">{String(idx + 1).padStart(2, '0')}</span>
                       {item.category}
                     </span>
                     <span className="font-mono text-cyan-400 font-semibold">{item.count} incident(s)</span>
@@ -265,7 +263,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
         </div>
 
-        {/* Chart 2: Threat Indicators Collected by Type (1 col) */}
         <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-5 backdrop-blur-md shadow-xl flex flex-col justify-between relative overflow-hidden">
           <div>
             <div className="flex items-center justify-between pb-3 border-b border-slate-800/80 mb-4">
@@ -339,7 +336,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
-          {(stats?.recentReports && stats.recentReports.length > 0 ? stats.recentReports : []).map((rep) => {
+          {reports.map((rep: any) => {
             const isHigh = rep.riskLevel === 'HIGH RISK';
 
             return (
@@ -348,7 +345,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 onClick={() => onSelectReport(rep.id)}
                 className="relative overflow-hidden p-4 rounded-xl bg-slate-950/80 border border-slate-800/90 hover:border-cyan-500/50 cursor-pointer transition-all duration-300 group hover:-translate-y-0.5 hover:shadow-lg hover:shadow-cyan-950/30 flex flex-col justify-between"
               >
-                {/* Cyber Corner Accent */}
                 <div className="absolute top-0 right-0 w-8 h-8 bg-gradient-to-bl from-slate-800/50 to-transparent pointer-events-none group-hover:from-cyan-500/20" />
 
                 <div>
@@ -388,5 +384,3 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     </div>
   );
 };
-
-
