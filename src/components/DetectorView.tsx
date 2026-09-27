@@ -9,6 +9,7 @@ import {
   ArrowRight 
 } from 'lucide-react';
 import { generateNCRPComplaint } from '../utils/ncrpGenerator';
+import { exportNCRPComplaintAsPDF } from '../utils/ncrpGenerator';
 
 export const DetectorView: React.FC = () => {
   const [inputText, setInputText] = useState('');
@@ -19,7 +20,11 @@ export const DetectorView: React.FC = () => {
   // FEATURE 4: Detect-First Workflow
   const handleRunAnalysis = () => {
     if (!inputText.trim()) return;
-
+// Export NCRP Draft directly to neat PDF via browser print engine
+  const handleDownloadNCRP = () => {
+    if (!analysisResult) return;
+    exportNCRPComplaintAsPDF(analysisResult);
+  };
     const mockVerdict = {
       id: `REP-${Math.floor(1000 + Math.random() * 9000)}`,
       riskLevel: 'HIGH RISK',
