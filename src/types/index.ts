@@ -113,3 +113,32 @@ export interface PersonaConfig {
   description: string;
   tone: string;
 }
+export type IndiaScamCategory = 
+  | 'Digital Arrest' 
+  | 'Fake Courier/Customs' 
+  | 'UPI Refund' 
+  | 'Loan-App Scam' 
+  | 'Part-Time Task Scam' 
+  | 'Utility & Bill Fraud';
+
+export interface BlocklistItem {
+  id: string;
+  type: 'PHONE' | 'UPI' | 'URL';
+  value: string;
+  status: 'PENDING' | 'VERIFIED';
+  occurrenceCount: number;
+  firstSeenAt: string;
+  lastSeenAt: string;
+}
+
+export interface NCRPComplaintDraft {
+  reportId: string;
+  generatedAt: string;
+  incidentType: string;
+  suspectPhoneNumbers: string[];
+  suspectUpiIds: string[];
+  suspectUrls: string[];
+  chronologicalSummary: string;
+  evidenceSnippets: string[];
+  disclaimer: string;
+}
