@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { DashboardView } from './components/DashboardView';
 import { DetectorView } from './components/DetectorView';
+import { BlocklistView } from './components/BlocklistView';
 import { ScamBaitSimulator } from './components/ScamBaitSimulator';
 import { ThreatSearch } from './components/ThreatSearch';
 import { ThreatNetworkGraph } from './components/ThreatNetworkGraph';
