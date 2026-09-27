@@ -2,7 +2,7 @@ from pathlib import Path
 
 out = Path("/mnt/data/DashboardView_immersive.tsx")
 
-code = r"""import React, { useState, useEffect } from 'react';
+code = import React, { useState, useEffect } from 'react';
 import {
   ShieldAlert, AlertTriangle, Database,
   Terminal, ArrowRight, Activity,
@@ -573,7 +573,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     </div>
   );
 };
-"""
+
 
 out.write_text(code, encoding="utf-8")
 print(f"Created: {out}")
