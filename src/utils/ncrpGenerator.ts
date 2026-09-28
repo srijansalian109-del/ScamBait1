@@ -170,12 +170,15 @@ export function exportNCRPComplaintAsPDF(report: any) {
       </div>
 
       <script>
+ // Look for this inside src/utils/ncrpGenerator.ts:
+<script>
   window.onload = function() {
     setTimeout(function() {
       window.focus();
       window.print();
     }, 500);
   };
+</script>
 </script>
     </body>
     </html>
