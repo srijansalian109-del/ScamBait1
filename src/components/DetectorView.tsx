@@ -21,10 +21,7 @@ export const DetectorView: React.FC = () => {
   const handleRunAnalysis = () => {
     if (!inputText.trim()) return;
 // Export NCRP Draft directly to neat PDF via browser print engine
-  const handleDownloadNCRP = () => {
-    if (!analysisResult) return;
-    exportNCRPComplaintAsPDF(analysisResult);
-  };
+ 
     const mockVerdict = {
       id: `REP-${Math.floor(1000 + Math.random() * 9000)}`,
       riskLevel: 'HIGH RISK',
@@ -48,20 +45,18 @@ export const DetectorView: React.FC = () => {
     setAnalysisResult(mockVerdict);
     setIsBaitingActive(false); // Hide baiting option until verdict is reviewed
   };
+  const handleDownloadNCRP = () => {
+  if (!analysisResult) return;
+
+  exportNCRPComplaintAsPDF(analysisResult);
+};
 
   // FEATURE 2: NCRP / 1930 Draft Exporter
   const handleDownloadNCRP = () => {
     if (!analysisResult) return;
     const draft = generateNCRPComplaint(analysisResult);
     
-    const blob = new Blob([JSON.stringify(draft, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `NCRP_1930_Complaint_Draft_${analysisResult.id}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
+   
 
   return (
     <div className="space-y-6 text-slate-100 font-mono text-xs">
