@@ -170,10 +170,13 @@ export function exportNCRPComplaintAsPDF(report: any) {
       </div>
 
       <script>
-        window.onload = function() {
-          window.print();
-        };
-      </script>
+  window.onload = function() {
+    setTimeout(function() {
+      window.focus();
+      window.print();
+    }, 500);
+  };
+</script>
     </body>
     </html>
   `;
