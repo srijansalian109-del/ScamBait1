@@ -8,8 +8,7 @@ import {
   AlertTriangle, 
   ArrowRight 
 } from 'lucide-react';
-import { generateNCRPComplaint } from '../utils/ncrpGenerator';
-import { exportNCRPComplaintAsPDF } from '../utils/ncrpGenerator';
+import { generateNCRPComplaint, exportNCRPComplaintAsPDF } from '../utils/ncrpGenerator';
 
 export const DetectorView: React.FC = () => {
   const [inputText, setInputText] = useState('');
@@ -20,8 +19,7 @@ export const DetectorView: React.FC = () => {
   // FEATURE 4: Detect-First Workflow
   const handleRunAnalysis = () => {
     if (!inputText.trim()) return;
-// Export NCRP Draft directly to neat PDF via browser print engine
- 
+
     const mockVerdict = {
       id: `REP-${Math.floor(1000 + Math.random() * 9000)}`,
       riskLevel: 'HIGH RISK',
@@ -45,18 +43,12 @@ export const DetectorView: React.FC = () => {
     setAnalysisResult(mockVerdict);
     setIsBaitingActive(false); // Hide baiting option until verdict is reviewed
   };
-  const handleDownloadNCRP = () => {
-  if (!analysisResult) return;
-
-  exportNCRPComplaintAsPDF(analysisResult);
-};
 
   // FEATURE 2: NCRP / 1930 Draft Exporter
   const handleDownloadNCRP = () => {
     if (!analysisResult) return;
-    const draft = generateNCRPComplaint(analysisResult);
-    
-   
+    exportNCRPComplaintAsPDF(analysisResult);
+  };
 
   return (
     <div className="space-y-6 text-slate-100 font-mono text-xs">
@@ -109,7 +101,7 @@ export const DetectorView: React.FC = () => {
             {/* FEATURE 2 BUTTON: NCRP Export */}
             <button
               onClick={handleDownloadNCRP}
-              className="flex items-center justify-center gap-1.5 px-3 py-2 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/40 rounded-lg font-bold text-[11px] transition-colors"
+              className="flex items-center justify-center gap-1.5 px-3 py-2 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/40 rounded-lg font-bold text-[11px] transition-colors cursor-pointer"
             >
               <Download className="w-4 h-4" />
               <span>Export NCRP 1930 Draft</span>
@@ -138,7 +130,7 @@ export const DetectorView: React.FC = () => {
               </button>
             </div>
           ) : (
-            /* FEATURE 1: Multilingual Baiting Persona Studio */
+            /* FEATURE 1: Multilingual Persona Studio */
             <div className="pt-3 border-t border-slate-800 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="font-bold text-emerald-400 flex items-center gap-1.5">
